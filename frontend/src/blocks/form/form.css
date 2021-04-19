@@ -1,0 +1,19 @@
+.form{
+  display: flex;
+  flex-direction: column;
+  max-width: 358px;
+  margin: 0 auto;
+}
+
+@media(max-width:418px) and (min-width:358px){
+  .form{
+    padding-left: calc((100vw - 358px)/(418 - 358) * (0 - 30) + 30px);
+    padding-right: calc((100vw - 358px)/(418 - 358) * (0 - 30) + 30px);
+  }
+}
+
+@media(max-width:358px) {
+  .form{
+    padding: 0 30px;
+  }
+}

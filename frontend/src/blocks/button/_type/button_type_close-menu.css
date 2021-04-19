@@ -1,0 +1,10 @@
+@media (max-width:450px) {
+  .button_type_close-menu {
+    background: url("../../../images/close.svg") no-repeat;
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    background-size: contain;
+  }
+}
