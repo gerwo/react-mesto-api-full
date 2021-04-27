@@ -20,13 +20,16 @@ const login = (req, res, next) => {
         throw new BadRequestError('Неправильные почта или пароль');
       }
 
-      const token = jwt.sign({
-        _id: user._id,
-      }, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
+      const token = jwt.sign(
+        { _id: user._id },
+        NODE_ENV === 'production' ? JWT_SECRET : 'secret-key',
+        { expiresIn: '7d' },
+      );
 
       res.cookie('jwt', token, {
         httpOnly: true,
-        sameSite: true,
+        secure: true,
+        sameSite: 'none',
         expiresIn: (3600 * 24 * 7),
       })
         .send({ message: 'Вы авторизовались!' });
@@ -70,6 +73,14 @@ const createUser = (req, res, next) => {
         });
     })
     .catch(next);
+};
+
+const signout = (req, res) => {
+  res.clearCookie('jwt', {
+    httpOnly: true,
+    secure: true,
+    sameSite: 'none',
+  }).send({ message: 'Успешный выход' });
 };
 
 const getCurrentUser = (req, res, next) => {
@@ -149,6 +160,7 @@ const updateUserAvatar = (req, res, next) => {
 module.exports = {
   login,
   createUser,
+  signout,
   getCurrentUser,
   getUsers,
   getUserById,

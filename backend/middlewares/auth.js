@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-const { JWT_SECRET = 'secret-key' } = process.env;
+const { NODE_ENV, JWT_SECRET = 'secret-key' } = process.env;
 
 const UnauthorizedError = require('../errors/unauthorized-err');
 
@@ -14,7 +14,7 @@ const auth = (req, res, next) => {
   let payload;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret-key');
   } catch (error) {
     throw new UnauthorizedError('Передан некорректный токен');
   }
