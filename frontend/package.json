@@ -1,7 +1,6 @@
 {
   "name": "mesto-react.js",
   "version": "0.1.0",
-  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.9",
@@ -20,8 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "npm run build && scp -r ./build/* gerwo@178.154.195.49:/home/gerwo/frontend"
-    //"deploy": "gh-pages -d build"
+    "deploy": "npm run build && scp -r ./build/* gerwo@130.193.51.52:/home/gerwo/frontend"
   },
   "eslintConfig": {
     "extends": [

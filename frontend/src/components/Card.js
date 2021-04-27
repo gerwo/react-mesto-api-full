@@ -7,7 +7,7 @@ function Card(props) {
   
   const isOwn = props.owner._id === currentUser._id;
 
-  const isLiked = props.likes.some(i => i._id === currentUser._id);
+  const isLiked = props.likes.some(i => i === currentUser._id);
 
   const cardLikeButtonClassName = (
     `button button_type_like opacity ${isLiked ? 'button_type_like_active' : ''}`
@@ -26,7 +26,6 @@ function Card(props) {
   }
 
   function handleDeleteClick(){
-    //console.log(props);
     props.onConfirmClick(props);
   }
 

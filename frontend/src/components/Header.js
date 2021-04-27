@@ -1,4 +1,3 @@
-import React from 'react'
 import logo from '../images/logo.svg';
 import { Route, Link } from 'react-router-dom';
 
@@ -14,17 +13,13 @@ function  Header(props) {
           <Link to="signin" className="header__link">Войти</Link>
         </Route>
         {props.isLoggedIn &&
-          <>
-              <button className="button button_type_menu"/>
-              <p className="header__user-login">{props.userLogin}</p>
-              <Link to="signin" className="header__link" onClick={props.onSignOut}>Выйти</Link>
-          </>
+        <>
+          <p className="header__user-login">{props.userLogin}</p>
+          <Link to="/" className="header__link" onClick={props.onSignOut}>Выйти</Link >
+        </>
         }
       </div>
-      <div className="">
-        <img src={logo} className="logo" alt="Логотип Mesto"/>
-        <button className="button button_type_close-menu" onClick={props.onCloseMenu}/>
-      </div>
+      <img src={logo} className="logo" alt="Логотип Mesto"/>
     </header>
   );
 }

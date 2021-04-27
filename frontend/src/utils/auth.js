@@ -1,7 +1,7 @@
 
 import {getResponseData} from './utils'
 
-export const BASE_URL = 'https://auth.nomoreparties.co';
+export const BASE_URL = 'https://api.gerwo.nomoredomains.monster';
 
 export const headers = {
   'Content-Type': 'application/json'
@@ -9,30 +9,41 @@ export const headers = {
 
 export function register({ email, password }){
   return fetch(`${BASE_URL}/signup`, {
-      method : 'POST',
-      headers,
-      body : JSON.stringify({
-        email, password
-      })
+    method : 'POST',
+    headers,
+    mode: 'cors',
+    body : JSON.stringify({
+      email, password
+    })
   }).then(result => getResponseData(result));
 }
 
 export function login({email, password}){
   return fetch(`${BASE_URL}/signin`, {
-      method : 'POST',
-      headers,
-      body : JSON.stringify({
-        email, password
-      })
+    method : 'POST',
+    headers,
+    credentials: 'include',
+    mode: 'cors',
+    body : JSON.stringify({
+      email, password
+    })
   }).then(result => getResponseData(result));
 }
 
-export function checkUserToken(jwt) {
+export function checkUserToken() {
   return fetch(`${BASE_URL}/users/me`, {
-    headers: {
-      ...headers,
-      'Authorization' : `Bearer ${jwt}`
-    },
+    method: 'GET',
+    credentials: 'include',
+    mode: 'cors',
+  })
+    .then((res) => getResponseData(res))
+}
+
+export function signOut(){
+  return fetch(`${BASE_URL}/signout`, {
+    method: 'DELETE',
+    credentials: 'include',
+    mode: 'cors',
   })
     .then((res) => getResponseData(res))
 }

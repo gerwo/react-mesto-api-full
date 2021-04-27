@@ -43,6 +43,21 @@ function App() {
 
   const [currentUser, setCurrentUser] = React.useState(CurrentUserContext);
 
+  function checkToken(){
+
+    auth.checkUserToken()
+      .then((data) => {
+        if (data) {
+          setCurrentUser(data);
+          setLoggedIn(true);
+          setHeaderUserLogin(data.email);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   function handleLogin({email, password}){
 
     setLoading(true);
@@ -51,11 +66,9 @@ function App() {
       email, password
     })
       .then((res) => {
-
-        if(res.token){
-
-          localStorage.setItem('token', res.token)
-
+        if(res){    
+          checkToken();    
+          getCards();  
           setHeaderUserLogin(email);
 
           setLoggedIn(true);
@@ -105,9 +118,12 @@ function App() {
   }
 
   function handleSignOut() {
-    localStorage.removeItem('token');
-    setLoggedIn(false);
-    setHeaderUserLogin('');
+    auth.signOut()
+      .then((res) => {
+        setLoggedIn(false);
+        setHeaderUserLogin('');
+      })
+      .catch((err) => console.log(`Error: ${err}`))
   }
 
 
@@ -171,7 +187,6 @@ function App() {
 
   function handleAddPlaceSubmit({name, link}) {
     setLoading(true);
-
     api.addCard({name, link})
       .then((newCard) => {
         setCards([newCard, ...cards]);
@@ -194,19 +209,17 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some((i) => i === currentUser._id);
 
     api.changeLikeCardStatus({cardId : card._id, isLiked: !isLiked})
       .then((newCard) => {
         const newCards = cards.map((c) => c._id === card._id ? newCard : c);
-
         setCards(newCards);
       }).catch(error => console.log(error));
   }
 
   function handleUpdateAvatar({avatar}) {
     setLoading(true);
-
     api.setUserAvatar({avatar})
       .then((data) => {
         setCurrentUser(data);
@@ -224,42 +237,20 @@ function App() {
       }).catch(error => console.log(error));
   }
 
-
-  function checkTokenInStorage(){
-
-    if (localStorage.getItem('token')) {
-      const token = localStorage.getItem('token');
-
-      auth.checkUserToken(token)
-        .then((data) => {
-          setLoggedIn(true);
-          setHeaderUserLogin(data.data.email);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  }
-
-  useEffect( () => {
-    Promise.resolve(api.getUserInfo())
-      .then((data) => {
-        setCurrentUser(data);
-      });
-  }, []);
-
-  useEffect(() => {
+  function getCards(){
     api.getCards()
       .then((data) => {
-        setCards(data);
+        if (Array.isArray(data)) {
+          setCards(data);
+        }
       })
       .catch(error => console.log(error));
-  }, []);
+  }
 
   useEffect(() => {
-    checkTokenInStorage();
+    checkToken();
+    getCards();
   }, [])
-
 
   useEventListener('keydown', handlePressEsc);
 
