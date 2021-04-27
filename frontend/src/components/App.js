@@ -241,7 +241,7 @@ function App() {
     api.getCards()
       .then((data) => {
         if (Array.isArray(data)) {
-          setCards(data);
+          setCards(data.reverse());
         }
       })
       .catch(error => console.log(error));
