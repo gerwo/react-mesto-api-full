@@ -1,7 +1,6 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
-const rateLimit = require('express-rate-limit');
 
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -13,19 +12,12 @@ const router = require('./routes/index');
 
 const NotFoundError = require('./errors/not-found-err');
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
-});
-
 const {
   PORT = 3000,
   MONGODB_URL = 'mongodb://localhost:27017/mestodb',
 } = process.env;
 
 const app = express();
-
-app.use(limiter);
 
 mongoose.connect(MONGODB_URL, {
   useNewUrlParser: true,
