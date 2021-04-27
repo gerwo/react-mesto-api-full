@@ -6,6 +6,7 @@ const User = require('../models/user');
 
 const NotFoundError = require('../errors/not-found-err');
 const BadRequestError = require('../errors/bad-request-err');
+const ExistingEmailError = require('../errors/existing-email-err');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -52,7 +53,7 @@ const createUser = (req, res, next) => {
   User.findOne({ email })
     .then((existedUser) => {
       if (existedUser) {
-        throw new BadRequestError('Пользователь с таким email уже существует');
+        throw new ExistingEmailError('Пользователь с таким email уже существует');
       }
 
       bcrypt.hash(password, 10)
